@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>InspireWorks IVR Demo</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #f5f6f8; margin: 0; padding: 40px 16px; color: #1d2330; }
+    .card { max-width: 420px; margin: 0 auto; background: #fff; border-radius: 12px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+    h1 { font-size: 22px; margin: 0 0 4px; }
+    p.sub { color: #667085; margin: 0 0 20px; font-size: 14px; }
+    label { font-size: 13px; font-weight: 600; }
+    input { width: 100%; box-sizing: border-box; padding: 11px 12px; margin: 6px 0 16px; border: 1px solid #d0d5dd; border-radius: 8px; font-size: 16px; }
+    button { width: 100%; padding: 12px; border: 0; border-radius: 8px; background: #3f5ae0; color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; }
+    button:disabled { opacity: .6; cursor: wait; }
+    #status { margin-top: 16px; font-size: 14px; min-height: 20px; }
+    .ok { color: #067647; } .err { color: #b42318; }
+    ol { font-size: 13px; color: #475467; padding-left: 18px; margin: 20px 0 0; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>InspireWorks IVR Demo</h1>
+    <p class="sub">Calls you from {{ from_number }}</p>
+    <form id="f">
+      <label for="to">Your phone number (E.164)</label>
+      <input id="to" name="to" placeholder="+919876543210" value="{{ default_to }}" required>
+      <button id="btn" type="submit">Call me</button>
+    </form>
+    <div id="status"></div>
+    <ol>
+      <li>Answer and enter your 4-digit OTP (birthdate DDMM)</li>
+      <li>Choose a language: 1 English, 2 Spanish</li>
+      <li>Press 1 to hear a message, or 2 to reach an associate</li>
+    </ol>
+  </div>
+  <script>
+    const f = document.getElementById('f'), btn = document.getElementById('btn'), st = document.getElementById('status');
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btn.disabled = true; st.className = ''; st.textContent = 'Placing call...';
+      try {
+        const r = await fetch('/call', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                         body: JSON.stringify({ to: document.getElementById('to').value }) });
+        const d = await r.json();
+        st.className = r.ok ? 'ok' : 'err';
+        st.textContent = r.ok ? d.message + ' — your phone should ring shortly.' : d.error;
+      } catch (err) {
+        st.className = 'err'; st.textContent = 'Could not reach the server.';
+      } finally { btn.disabled = false; }
+    });
+  </script>
+</body>
+</html>
