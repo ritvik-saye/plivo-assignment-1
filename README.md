@@ -50,8 +50,8 @@ Fill in `.env`:
 | Variable | Meaning |
 |---|---|
 | `PLIVO_AUTH_ID` / `PLIVO_AUTH_TOKEN` | Plivo credentials |
-| `PLIVO_NUMBER` | Plivo number the call comes from (`+918035454161`) |
-| `ASSOCIATE_NUMBER` | Live associate number (`+912264236412`) |
+| `PLIVO_NUMBER` | Plivo number the call comes from (`+`) |
+| `ASSOCIATE_NUMBER` | Live associate number (`+`) |
 | `TO_NUMBER` | Your phone number in E.164, e.g. `+919876543210` (prefills the page) |
 | `OTP` | Your birthdate in DDMM, e.g. `1503` for 15 March |
 | `BASE_URL` | Your public ngrok URL, no trailing slash |
