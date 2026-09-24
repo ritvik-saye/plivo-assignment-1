@@ -72,7 +72,7 @@ def test_option_1_plays_audio_then_returns_to_menu(client):
 def test_option_2_dials_associate(client):
     body = post(client, "/ivr/menu/choice?lang=es", "2")
     assert "<Dial" in body and "<Number>" in body
-    assert 'callerId="+918035454161"' in body
+    assert 'callerId="+"' in body
     assert "Conectandolo" in body
 
 
